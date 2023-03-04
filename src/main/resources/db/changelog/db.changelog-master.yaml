@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/tables/create/create-table-currency.sql
+  - include:
+      file: db/changelog/changes/tables/create/create-table-atm.sql
+  - include:
+      file: db/changelog/changes/tables/create/create-table-atm-balance.sql
+  - include:
+      file: db/changelog/changes/tables/create/create-table-role.sql
+  - include:
+      file: db/changelog/changes/tables/create/create-table-users.sql
+  - include:
+      file: db/changelog/changes/tables/create/create-table-account.sql
+  - include:
+      file: db/changelog/changes/tables/create/create-table-user-account.sql
+#
+  - include:
+      file: db/changelog/changes/tables/insert/insert-role.sql
