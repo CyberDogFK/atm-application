@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class UserResponseDtoMapper implements ResponseDtoMapper<UserResponseDto, User> {
     @Override
     public UserResponseDto mapToDto(User model) {
-        System.out.println(model);
         UserResponseDto userDto = new UserResponseDto();
         userDto.setId(model.getId());
         userDto.setAccountIds(model.getAccounts().stream()

@@ -9,10 +9,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
     private final UserService userService;
+    private final Logger logger = Logger.getLogger("Authentication logger");
 
     public CustomUserDetailService(UserService userService) {
         this.userService = userService;
@@ -21,9 +24,11 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optionalUser = userService.findByName(username);
-
+        logger.log(Level.INFO, username);
+        logger.log(Level.INFO, optionalUser.toString());
         UserBuilder userBuilder;
         if (optionalUser.isPresent()) {
+            logger.log(Level.INFO, optionalUser.get().getPassword());
             User presentUser  = optionalUser.get();
             userBuilder = org.springframework.security.core.userdetails.User.withUsername(username);
             userBuilder.password(presentUser.getPassword());

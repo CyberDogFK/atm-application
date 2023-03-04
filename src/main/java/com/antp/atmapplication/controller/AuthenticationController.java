@@ -31,10 +31,10 @@ public class AuthenticationController {
         return responseDtoMapper.mapToDto(user);
     }
 
-    @PostMapping("/login")
-    public User login(@RequestBody UserLoginDto userLoginDto)
-            throws AuthenticationException {
-        User user = authenticationService.login(userLoginDto.getName(), userLoginDto.getPassword());
-        return user;
-    }
+//    @PostMapping("/login")
+//    public User login(@RequestBody UserLoginDto userLoginDto)
+//            throws AuthenticationException {
+//        User user = authenticationService.login(userLoginDto.getName(), userLoginDto.getPassword());
+//        return user;
+//    }
 }

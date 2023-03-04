@@ -8,14 +8,17 @@ import com.antp.atmapplication.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final Logger logger = Logger.getLogger("Authentication logger");
 
     public AuthenticationServiceImpl(UserService userService,
                                      RoleService roleService,
@@ -29,19 +32,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public User register(String name, String password) {
         User user = new User();
         user.setName(name);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setRole(roleService.getRoleByName(Role.RoleName.USER));
+        user.setAccounts(new ArrayList<>());
         user = userService.save(user);
         return user;
     }
 
-    @Override
-    public User login(String login, String password) throws AuthenticationException {
-        Optional<User> user = userService.findByName(login);
-        String encodedPassword = passwordEncoder.encode(password);
-        if (user.isEmpty() || user.get().getPassword().equals(encodedPassword)) {
-            throw new AuthenticationException("Incorrect username of password");
-        }
-        return user.get();
-    }
+//    @Override
+//    public User login(String login, String password) throws AuthenticationException {
+//        logger.log(Level.INFO, "Login");
+//        Optional<User> user = userService.findByName(login);
+//        String encodedPassword = passwordEncoder.encode(password);
+//        if (user.isEmpty() || user.get().getPassword().equals(encodedPassword)) {
+//            throw new AuthenticationException("Incorrect username of password");
+//        }
+//        return user.get();
+//    }
 }
