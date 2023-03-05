@@ -44,12 +44,6 @@ public class UserController {
         return responseDtoMapper.mapToDto(userService.getById(id));
     }
 
-    @PostMapping
-    public UserResponseDto create(@RequestBody UserRequestDto userDto) {
-        return responseDtoMapper.mapToDto(
-                userService.save(requestDtoMapper.mapToModel(userDto)));
-    }
-
     @PutMapping("/{id}")
     public UserResponseDto update(@PathVariable Long id,
                                   @RequestBody UserRequestDto userDto) {

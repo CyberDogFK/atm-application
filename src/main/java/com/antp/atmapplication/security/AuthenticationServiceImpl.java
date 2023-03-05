@@ -1,6 +1,6 @@
 package com.antp.atmapplication.security;
 
-import com.antp.atmapplication.lib.AuthenticationException;
+import com.antp.atmapplication.exception.AuthenticationException;
 import com.antp.atmapplication.model.Role;
 import com.antp.atmapplication.model.User;
 import com.antp.atmapplication.service.RoleService;
@@ -39,14 +39,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return user;
     }
 
-//    @Override
-//    public User login(String login, String password) throws AuthenticationException {
-//        logger.log(Level.INFO, "Login");
-//        Optional<User> user = userService.findByName(login);
-//        String encodedPassword = passwordEncoder.encode(password);
-//        if (user.isEmpty() || user.get().getPassword().equals(encodedPassword)) {
-//            throw new AuthenticationException("Incorrect username of password");
-//        }
-//        return user.get();
-//    }
+    @Override
+    public User login(String login, String password) throws AuthenticationException {
+        logger.log(Level.INFO, "Login");
+        Optional<User> user = userService.findByName(login);
+        String encodedPassword = passwordEncoder.encode(password);
+        if (user.isEmpty() || user.get().getPassword().equals(encodedPassword)) {
+            throw new AuthenticationException("Incorrect username of password");
+        }
+        return user.get();
+    }
 }

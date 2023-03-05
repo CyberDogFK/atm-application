@@ -1,6 +1,6 @@
 package com.antp.atmapplication.service.impl;
 
-import com.antp.atmapplication.lib.DataProcessingException;
+import com.antp.atmapplication.exception.DataProcessingException;
 import com.antp.atmapplication.model.User;
 import com.antp.atmapplication.repository.UserRepository;
 import com.antp.atmapplication.service.UserService;
