@@ -16,3 +16,5 @@ databaseChangeLog:
 #
   - include:
       file: db/changelog/changes/tables/insert/insert-role.sql
+  - include:
+      file: db/changelog/changes/tables/insert/insert-user.sql

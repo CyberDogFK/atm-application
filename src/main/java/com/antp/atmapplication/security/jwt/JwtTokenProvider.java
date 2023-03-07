@@ -17,14 +17,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @Component
 public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey;
     @Value("${security.jwt.token.expire-length:360000}")
-    private String validityMilliseconds;
+    private long validityMilliseconds;
     private final UserDetailsService userDetailsService;
+    private final Logger logger = Logger.getLogger("jwt logger");
 
     public JwtTokenProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -40,12 +45,13 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(login);
         claims.put("role", role);
         Date now = new Date();
+        logger.log(Level.INFO, Long.toString(now.getTime()));
         Date validity = new Date(now.getTime() + validityMilliseconds);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.ES256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 

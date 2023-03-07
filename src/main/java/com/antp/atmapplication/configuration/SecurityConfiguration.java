@@ -35,22 +35,18 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers(HttpMethod.POST,"/register", "/login").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
                 .apply(new JwtConfigurer(jwtTokenProvider))
-                .and()
-                .authorizeHttpRequests((authz) ->
-                        authz
-                                .requestMatchers(HttpMethod.POST,"/register").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .formLogin().permitAll()
                 .and()
                 .build();
     }

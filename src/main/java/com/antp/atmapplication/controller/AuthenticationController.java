@@ -48,6 +48,7 @@ public class AuthenticationController {
         User user = authenticationService.login(userLoginDto.getName(),
                 userLoginDto.getPassword());
         String token = jwtTokenProvider.createToken(user.getName(), user.getRole().getName().name());
+        logger.log(Level.INFO, "token:" +  token);
         return new ResponseEntity<>(Map.of("token", token), HttpStatus.OK);
     }
 }
