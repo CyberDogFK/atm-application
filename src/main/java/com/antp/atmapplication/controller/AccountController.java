@@ -8,6 +8,7 @@ import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +39,17 @@ public class AccountController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/{id}")
+    public AccountResponseDto getById(@PathVariable Long id) {
+        return accountResponseDtoMapper.mapToDto(
+                accountService.findById(id)
+        );
+    }
+
     @PostMapping
     public AccountResponseDto create(@RequestBody AccountRequestDto accountRequestDto) {
         return accountResponseDtoMapper.mapToDto(accountService.save(
-                accountRequestDtoMapper.mapToModel(accountRequestDto)));
+                accountRequestDtoMapper.mapToModel(accountRequestDto))
+        );
     }
 }

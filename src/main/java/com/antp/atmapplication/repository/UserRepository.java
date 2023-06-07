@@ -17,10 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
 
     @Override
+    @NonNull
     @Query("select distinct u from User u"
             + " left join fetch u.accounts"
             + " where u.id = ?1")
-    Optional<User> findById(Long usedId);
+    Optional<User> findById(@NonNull Long usedId);
 
     Optional<User> findUserByName(String name);
 }

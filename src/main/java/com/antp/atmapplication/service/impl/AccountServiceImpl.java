@@ -1,5 +1,6 @@
 package com.antp.atmapplication.service.impl;
 
+import com.antp.atmapplication.exception.DataProcessingException;
 import com.antp.atmapplication.model.Account;
 import com.antp.atmapplication.repository.AccountRepository;
 import com.antp.atmapplication.service.AccountService;
@@ -18,6 +19,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAll() {
         return accountRepository.findAll();
+    }
+
+    @Override
+    public Account findById(Long id) {
+        return accountRepository.findById(id).orElseThrow(() ->
+                new DataProcessingException("Can't find account with id " + id));
     }
 
     @Override

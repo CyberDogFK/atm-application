@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 public class AccountResponseDtoMapper implements ResponseDtoMapper<AccountResponseDto, Account> {
     @Override
     public AccountResponseDto mapToDto(Account model) {
-        AccountResponseDto responseDto = new AccountResponseDto();
-        responseDto.setId(model.getId());
-        responseDto.setCurrencyId(model.getCurrency().getId());
-        responseDto.setUserId(model.getId());
-        return responseDto;
+        return new AccountResponseDto(
+                model.getId(),
+                model.getUser().getId(),
+                model.getCurrency().getId(),
+                model.getBalance()
+        );
     }
 }

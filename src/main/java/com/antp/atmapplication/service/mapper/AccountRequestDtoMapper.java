@@ -19,9 +19,10 @@ public class AccountRequestDtoMapper implements RequestDtoMapper<AccountRequestD
 
     @Override
     public Account mapToModel(AccountRequestDto dto) {
-        Account account = new Account();
-        account.setCurrency(currencyService.getById(dto.getCurrencyId()));
-        account.setUser(userService.getById(dto.getUserId()));
-        return account;
+        return new Account(
+                userService.getById(dto.getUserId()),
+                currencyService.getById(dto.getCurrencyId()),
+                dto.getBalance()
+        );
     }
 }

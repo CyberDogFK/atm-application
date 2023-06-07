@@ -18,3 +18,5 @@ databaseChangeLog:
       file: db/changelog/changes/tables/insert/insert-role.sql
   - include:
       file: db/changelog/changes/tables/insert/insert-user.sql
+  - include:
+      file: db/changelog/changes/tables/alter/alter-table-account-add-balance.sql

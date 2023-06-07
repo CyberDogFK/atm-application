@@ -29,6 +29,7 @@ public class AtmServiceImpl implements AtmService {
 
     @Override
     public Atm save(Atm atm) {
+        System.err.println(atm);
         return atmRepository.save(atm);
     }
 }
