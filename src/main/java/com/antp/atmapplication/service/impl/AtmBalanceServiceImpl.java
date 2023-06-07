@@ -19,4 +19,9 @@ public class AtmBalanceServiceImpl implements AtmBalanceService {
     public List<AtmBalance> getAll() {
         return atmBalanceRepository.findAll();
     }
+
+    @Override
+    public List<AtmBalance> findAllByIds(List<Long> ids) {
+        return atmBalanceRepository.findAllById(ids);
+    }
 }

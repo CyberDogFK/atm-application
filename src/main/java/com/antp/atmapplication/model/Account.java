@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,4 +21,5 @@ public class Account {
     private User user;
     @ManyToOne
     private Currency currency;
+    private BigDecimal balance;
 }

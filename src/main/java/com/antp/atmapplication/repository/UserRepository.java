@@ -6,12 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.lang.NonNull;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     @Query("select distinct u from User u "
             + "left join fetch u.accounts a"
     )
+    @NonNull
     List<User> findAll();
 
     @Override

@@ -1,11 +1,10 @@
 package com.antp.atmapplication.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
-@Getter
-@Setter
-public class AtmResponseDto {
-    private Long id;
-    private String address;
+public record AtmResponseDto (
+    Long id,
+    String address,
+    List<AtmBalanceResponseDto> atmBalanceDtoList
+) {
 }

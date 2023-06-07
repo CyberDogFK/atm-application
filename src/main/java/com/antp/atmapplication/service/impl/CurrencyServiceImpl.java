@@ -26,4 +26,9 @@ public class CurrencyServiceImpl implements CurrencyService {
         return currencyRepository.findById(id).orElseThrow(() ->
                 new DataProcessingException("Can't find currency by id: " + id));
     }
+
+    @Override
+    public Currency save(Currency currency) {
+        return currencyRepository.save(currency);
+    }
 }
