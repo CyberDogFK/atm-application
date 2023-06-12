@@ -59,6 +59,13 @@ public class AtmController {
         );
     }
 
+    @PutMapping("{id}")
+    public AtmResponseDto update(@RequestBody AtmRequestDto atmRequestDto, @PathVariable Long id) {
+        Atm atm = atmRequestDtoMapper.mapToModel(atmRequestDto);
+        atm.setId(id);
+        return atmResponseDtoMapper.mapToDto(atmService.save(atm));
+    }
+
     @PutMapping("/{id}")
     public AtmResponseDto addValueToAtm(@PathVariable Long id,
                                         @RequestParam String currency,
@@ -73,4 +80,5 @@ public class AtmController {
         atmBalance.setBalance(balance.add(new BigDecimal(value)));
         return atmResponseDtoMapper.mapToDto(atmService.save(byId));
     }
+
 }
