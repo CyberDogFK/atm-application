@@ -65,12 +65,12 @@ public class AtmController {
                                         @RequestParam Integer value) {
         Atm byId = atmService.getById(id);
         AtmBalance atmBalance = byId.getBalanceList().stream()
-                .filter(it -> it.getCurrency().getName().equals(currency))
+                .filter(it -> it.getCurrency().getShortName().equals(currency))
                 .findFirst().orElseThrow(() ->
                         new DataProcessingException("Can't find any currency " + currency));
         BigDecimal balance = atmBalance.getBalance();
         logger.info("atm balance before" + balance);
         atmBalance.setBalance(balance.add(new BigDecimal(value)));
-        return atmResponseDtoMapper.mapToDto(byId);
+        return atmResponseDtoMapper.mapToDto(atmService.save(byId));
     }
 }
