@@ -1,12 +1,7 @@
 package com.antp.atmapplication.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,13 +14,15 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Atm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String address;
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "atm_balances",
+            joinColumns = @JoinColumn(name = "balance_id"),
+            inverseJoinColumns = @JoinColumn(name = "atm_id"))
     private List<AtmBalance> balanceList;
 
     public Atm(String address, List<AtmBalance> balanceList) {

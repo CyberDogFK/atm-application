@@ -13,7 +13,7 @@ public class AtmResponseDtoMapper implements ResponseDtoMapper<AtmResponseDto, A
                 model.getAddress(),
                 model.getBalanceList().stream().map(it -> new AtmBalanceResponseDto(
                         it.getId(),
-                        it.getAtm().getId(),
+//                        it.getAtm().getId(),
                         it.getCurrency().getId(),
                         it.getBalance()
                 )).toList()

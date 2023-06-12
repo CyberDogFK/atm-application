@@ -27,14 +27,17 @@ public class AtmBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Atm atm;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Atm atm;
     @ManyToOne(fetch = FetchType.LAZY)
     private Currency currency;
     private BigDecimal balance;
 
-    public AtmBalance(Atm atm, Currency currency, BigDecimal balance) {
-        this.atm = atm;
+    public AtmBalance(
+//            Atm atm,
+            Currency currency,
+            BigDecimal balance) {
+//        this.atm = atm;
         this.currency = currency;
         this.balance = balance;
     }

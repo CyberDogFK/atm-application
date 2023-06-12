@@ -2,4 +2,4 @@
 
 --liquibase formatted sql
 --changeset <antonpvliuk>:<alter-table-account-add-balance>
-ALTER TABLE PUBLIC.account ADD BALANCE NUMERIC
+ALTER TABLE PUBLIC.account ADD COLUMN balance NUMERIC

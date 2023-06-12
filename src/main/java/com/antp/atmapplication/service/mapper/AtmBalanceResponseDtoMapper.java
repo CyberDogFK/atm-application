@@ -10,7 +10,7 @@ public class AtmBalanceResponseDtoMapper implements ResponseDtoMapper<AtmBalance
     public AtmBalanceResponseDto mapToDto(AtmBalance model) {
         return new AtmBalanceResponseDto(
                 model.getId(),
-                model.getAtm().getId(),
+//                model.getAtm().getId(),
                 model.getCurrency().getId(),
                 model.getBalance()
         );

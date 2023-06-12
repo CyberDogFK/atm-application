@@ -19,7 +19,7 @@ public class AtmBalanceRequestDtoMapper implements RequestDtoMapper<AtmBalanceRe
     @Override
     public AtmBalance mapToModel(AtmBalanceRequestDto dto) {
         return new AtmBalance(
-                atmService.getById(dto.getAtmId()),
+//                atmService.getById(dto.getAtmId()),
                 currencyService.getById(dto.getCurrencyId()),
                 dto.getBalance()
         );
