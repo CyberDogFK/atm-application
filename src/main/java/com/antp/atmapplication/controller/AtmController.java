@@ -142,6 +142,14 @@ public class AtmController {
                                                   @RequestParam String currency,
                                                   @RequestParam BigDecimal value,
                                                   Authentication authentication) {
+        logger.info("100 " + (value.compareTo(new BigDecimal(100)) != 0));
+        logger.info("200 " + (value.compareTo(new BigDecimal(200)) != 0));
+        logger.info("500 " + (value.compareTo(new BigDecimal(500)) != 0));
+        if ((value.compareTo(new BigDecimal(100)) != 0)
+                && (value.compareTo(new BigDecimal(200)) != 0)
+                && (value.compareTo(new BigDecimal(500)) != 0)) {
+            throw new RuntimeException("ATM can take only 100, 200, 500 banknotes");
+        }
         User user = userService.findByName(authentication.getName()).orElseThrow(() ->
                 new RuntimeException("Can't find your account with name "
                         + authentication.getName()));
