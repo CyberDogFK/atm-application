@@ -1,14 +1,10 @@
 package com.antp.atmapplication.controller;
 
-import com.antp.atmapplication.dto.AccountResponseDto;
 import com.antp.atmapplication.dto.AtmBalanceRequestDto;
 import com.antp.atmapplication.dto.AtmBalanceResponseDto;
-import com.antp.atmapplication.model.Account;
 import com.antp.atmapplication.model.AtmBalance;
-import com.antp.atmapplication.model.User;
 import com.antp.atmapplication.service.AccountService;
 import com.antp.atmapplication.service.AtmBalanceService;
-import com.antp.atmapplication.service.AtmService;
 import com.antp.atmapplication.service.UserService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
@@ -29,19 +25,17 @@ public class AtmBalanceController {
     private final AtmBalanceService atmBalanceService;
     private final ResponseDtoMapper<AtmBalanceResponseDto, AtmBalance> atmBalanceResponseDtoMapper;
     private final RequestDtoMapper<AtmBalanceRequestDto, AtmBalance> atmBalanceRequestDtoMapper;
-    private final ResponseDtoMapper<AccountResponseDto, Account> accountResponseDtoMapper;
-    private final AtmService atmService;
     private final UserService userService;
     private final AccountService accountService;
 
     public AtmBalanceController(AtmBalanceService atmBalanceService,
                                 ResponseDtoMapper<AtmBalanceResponseDto, AtmBalance> atmBalanceResponseDtoMapper,
-                                RequestDtoMapper<AtmBalanceRequestDto, AtmBalance> atmBalanceRequestDtoMapper, ResponseDtoMapper<AccountResponseDto, Account> accountResponseDtoMapper, AtmService atmService, UserService userService, AccountService accountService) {
+                                RequestDtoMapper<AtmBalanceRequestDto, AtmBalance> atmBalanceRequestDtoMapper,
+                                UserService userService,
+                                AccountService accountService) {
         this.atmBalanceService = atmBalanceService;
         this.atmBalanceResponseDtoMapper = atmBalanceResponseDtoMapper;
         this.atmBalanceRequestDtoMapper = atmBalanceRequestDtoMapper;
-        this.accountResponseDtoMapper = accountResponseDtoMapper;
-        this.atmService = atmService;
         this.userService = userService;
         this.accountService = accountService;
     }

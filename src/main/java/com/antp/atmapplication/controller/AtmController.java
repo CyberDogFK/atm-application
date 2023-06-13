@@ -1,24 +1,19 @@
 package com.antp.atmapplication.controller;
 
-import com.antp.atmapplication.dto.*;
+import com.antp.atmapplication.dto.AtmBalanceResponseDto;
+import com.antp.atmapplication.dto.AtmRequestDto;
+import com.antp.atmapplication.dto.AtmResponseDto;
 import com.antp.atmapplication.exception.DataProcessingException;
-import com.antp.atmapplication.model.Account;
 import com.antp.atmapplication.model.Atm;
 import com.antp.atmapplication.model.AtmBalance;
-import com.antp.atmapplication.model.User;
-import com.antp.atmapplication.service.AccountService;
-import com.antp.atmapplication.service.AtmBalanceService;
 import com.antp.atmapplication.service.AtmService;
-import com.antp.atmapplication.service.UserService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
 import java.math.BigDecimal;
 import java.util.List;
-
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

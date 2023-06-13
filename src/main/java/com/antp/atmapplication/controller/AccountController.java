@@ -8,8 +8,14 @@ import com.antp.atmapplication.service.UserService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -68,8 +74,7 @@ public class AccountController {
                                         @PathVariable Long id,
                                         @PathVariable Long sendToAccountId,
                                         @RequestParam BigDecimal value) {
-        Account userAccount = userService.findByName(authentication.getName()).orElseThrow(() ->
-                        new RuntimeException("Can't find user with name " + authentication.getName()))
+        Account userAccount = userService.findUserFromAuthentication(authentication)
                 .getAccounts().stream()
                 .filter(it -> it.getId().equals(id))
                 .findFirst().orElseThrow(() ->
@@ -78,9 +83,7 @@ public class AccountController {
                                 + " account with id " + id));
         Account sendToAccount = accountService.findById(sendToAccountId);
         return accountResponseDtoMapper.mapToDto(
-                accountService.transferMoney(userAccount, sendToAccount, value));
+                accountService.transferMoney(userAccount, sendToAccount, value)
+        );
     }
-
-//    @PutMapping("/{id}")
-//    public AccountResponseDto updateWithdraw() {}
 }
