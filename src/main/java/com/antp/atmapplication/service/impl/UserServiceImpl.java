@@ -4,6 +4,7 @@ import com.antp.atmapplication.exception.DataProcessingException;
 import com.antp.atmapplication.model.User;
 import com.antp.atmapplication.repository.UserRepository;
 import com.antp.atmapplication.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,5 +37,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByName(String name) {
         return userRepository.findUserByName(name);
+    }
+
+    @Override
+    public User findUserFromAuthentication(Authentication authentication) {
+        return findByName(authentication.getName()).orElseThrow(() ->
+                new RuntimeException("Can't find your account with name "
+                        + authentication.getName()));
     }
 }

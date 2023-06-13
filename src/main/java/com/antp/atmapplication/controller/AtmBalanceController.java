@@ -4,7 +4,6 @@ import com.antp.atmapplication.dto.AccountResponseDto;
 import com.antp.atmapplication.dto.AtmBalanceRequestDto;
 import com.antp.atmapplication.dto.AtmBalanceResponseDto;
 import com.antp.atmapplication.model.Account;
-import com.antp.atmapplication.model.Atm;
 import com.antp.atmapplication.model.AtmBalance;
 import com.antp.atmapplication.model.User;
 import com.antp.atmapplication.service.AccountService;
@@ -71,25 +70,18 @@ public class AtmBalanceController {
 
     @PutMapping("/{id}/account/put/{accountId}")
     @Transactional
-    public AccountResponseDto putMoneyInAccount(@PathVariable Long id,
+    public AtmBalanceResponseDto putMoneyInAccount(@PathVariable Long id,
                                                 @PathVariable Long accountId,
                                                 @RequestParam BigDecimal value,
                                                 Authentication authentication) {
-        final var user = userService.findByName(authentication.getName()).orElseThrow(() ->
-                new RuntimeException("Can't find your account with name "
-                        + authentication.getName()));
-        final var account = user.getAccounts().stream()
-                .filter(it -> it.getId().equals(accountId))
-                .findFirst().orElseThrow(() ->
-                        new RuntimeException("Can't find user: " + user.getName()
-                                + " account with id " + accountId));
+        checkBanknotes(value);
+        final var account = accountService.findUserAccountById(
+                userService.findUserFromAuthentication(authentication),
+                accountId);
         final var atmBalance = atmBalanceService.getById(id);
-        atmBalanceService.puyMoneyIntoAccount(atmBalance, account, value);
-        account.setBalance(account.getBalance().add(value));
-        atmBalance.setBalance(atmBalance.getBalance().add(value));
-        atmBalanceService.save(atmBalance);
-        Account save = accountService.save(account);
-        return accountResponseDtoMapper.mapToDto(save);
+        return atmBalanceResponseDtoMapper.mapToDto(
+                atmBalanceService.puyMoneyIntoAccount(atmBalance, account, value)
+        );
     }
 
     @PutMapping("/{id}/account/withdraw/{accountId}")
@@ -98,22 +90,21 @@ public class AtmBalanceController {
                                                   @PathVariable Long accountId,
                                                   @RequestParam BigDecimal value,
                                                   Authentication authentication) {
+        checkBanknotes(value);
+        final var account = accountService.findUserAccountById(
+                userService.findUserFromAuthentication(authentication),
+                accountId);
+        final var atmBalance = atmBalanceService.getById(id);
+        return atmBalanceResponseDtoMapper.mapToDto(
+                atmBalanceService.withdrawMoneyIntoAccount(atmBalance, account, value)
+        );
+    }
+
+    private void checkBanknotes(BigDecimal value) {
         if ((value.compareTo(new BigDecimal(100)) != 0)
                 && (value.compareTo(new BigDecimal(200)) != 0)
                 && (value.compareTo(new BigDecimal(500)) != 0)) {
             throw new RuntimeException("ATM can take only 100, 200, 500 banknotes");
         }
-        User user = userService.findByName(authentication.getName()).orElseThrow(() ->
-                new RuntimeException("Can't find your account with name "
-                        + authentication.getName()));
-        Account account = user.getAccounts().stream()
-                .filter(it -> it.getId().equals(accountId))
-                .findFirst().orElseThrow(() ->
-                        new RuntimeException("Can't find user: " + user.getName()
-                                + " account with id " + accountId));
-        AtmBalance atmBalance = atmBalanceService.getById(id);
-        return atmBalanceResponseDtoMapper.mapToDto(
-                atmBalanceService.withdrawMoneyIntoAccount(atmBalance, account, value)
-        );
     }
 }

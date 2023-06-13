@@ -1,6 +1,7 @@
 package com.antp.atmapplication.service;
 
 import com.antp.atmapplication.model.Account;
+import com.antp.atmapplication.model.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface AccountService {
     Account save(Account account);
 
     Account transferMoney(Account from, Account to, BigDecimal value);
+
+    Account findUserAccountById(User user, Long accountId);
 }

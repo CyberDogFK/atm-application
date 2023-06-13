@@ -2,6 +2,7 @@ package com.antp.atmapplication.service.impl;
 
 import com.antp.atmapplication.exception.DataProcessingException;
 import com.antp.atmapplication.model.Account;
+import com.antp.atmapplication.model.User;
 import com.antp.atmapplication.repository.AccountRepository;
 import com.antp.atmapplication.service.AccountService;
 import jakarta.transaction.Transactional;
@@ -54,5 +55,14 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException("Error while processing transfer");
         }
         return saved;
+    }
+
+    @Override
+    public Account findUserAccountById(User user, Long accountId) {
+        return user.getAccounts().stream()
+                .filter(it -> it.getId().equals(accountId))
+                .findFirst().orElseThrow(() ->
+                        new RuntimeException("Can't find user " + user.getName()
+                                + " account with accountId " + accountId));
     }
 }
