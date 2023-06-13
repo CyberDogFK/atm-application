@@ -107,7 +107,7 @@ public class AtmController {
                 .toList();
     }
 
-    @PutMapping("/{id}/account/{accountId}")
+    @PutMapping("/{id}/account/put/{accountId}")
     @Transactional
     public AccountResponseDto putMoneyInAccount(@PathVariable Long id,
                                                 @PathVariable Long accountId,
@@ -129,9 +129,38 @@ public class AtmController {
                         new RuntimeException("Atm with id " + atm.getId()
                                 + " have only currency " + atm.getBalanceList()));
         account.setBalance(account.getBalance().add(value));
-        Account save = accountService.save(account);
         atmBalance.setBalance(atmBalance.getBalance().add(value));
         atmBalanceService.save(atmBalance);
+        Account save = accountService.save(account);
         return accountResponseDtoMapper.mapToDto(save);
+    }
+
+    @PutMapping("/{id}/account/withdraw/{accountId}")
+    @Transactional
+    public AccountResponseDto withdrawFromAccount(@PathVariable Long id,
+                                                  @PathVariable Long accountId,
+                                                  @RequestParam String currency,
+                                                  @RequestParam BigDecimal value,
+                                                  Authentication authentication) {
+        User user = userService.findByName(authentication.getName()).orElseThrow(() ->
+                new RuntimeException("Can't find your account with name "
+                        + authentication.getName()));
+        Account account = user.getAccounts().stream()
+                .filter(it -> it.getId().equals(accountId))
+                .findFirst().orElseThrow(() ->
+                        new RuntimeException("Can't find user: " + user.getName()
+                                + " account with id " + accountId));
+        Atm atm = atmService.getById(id);
+        AtmBalance atmBalance = atm.getBalanceList().stream()
+                .filter(it -> it.getCurrency().getShortName().equals(currency))
+                .findFirst().orElseThrow(() ->
+                        new RuntimeException("Atm with id " + atm.getId()
+                                + " have only currency " + atm.getBalanceList()));
+        account.setBalance(account.getBalance().subtract(value));
+        atmBalance.setBalance(atmBalance.getBalance().subtract(value));
+        Account save = accountService.save(account);
+        atmBalanceService.save(atmBalance);
+        return accountResponseDtoMapper.mapToDto(save);
+
     }
 }
