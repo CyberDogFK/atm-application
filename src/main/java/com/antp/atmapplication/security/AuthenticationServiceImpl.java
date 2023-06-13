@@ -41,7 +41,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User login(String login, String password) throws AuthenticationException {
-        logger.log(Level.INFO, "Login");
         Optional<User> user = userService.findByName(login);
         String encodedPassword = passwordEncoder.encode(password);
         if (user.isEmpty() || user.get().getPassword().equals(encodedPassword)) {

@@ -5,12 +5,13 @@ import com.antp.atmapplication.dto.AtmResponseDto;
 import com.antp.atmapplication.exception.DataProcessingException;
 import com.antp.atmapplication.model.Atm;
 import com.antp.atmapplication.model.AtmBalance;
-import com.antp.atmapplication.service.AtmBalanceService;
 import com.antp.atmapplication.service.AtmService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
 import java.math.BigDecimal;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,7 +67,8 @@ public class AtmController {
         return atmResponseDtoMapper.mapToDto(atmService.save(atm));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/put")
+    @Transactional
     public AtmResponseDto addValueToAtm(@PathVariable Long id,
                                         @RequestParam String currency,
                                         @RequestParam Integer value) {
@@ -80,5 +82,4 @@ public class AtmController {
         atmBalance.setBalance(balance.add(new BigDecimal(value)));
         return atmResponseDtoMapper.mapToDto(atmService.save(byId));
     }
-
 }
