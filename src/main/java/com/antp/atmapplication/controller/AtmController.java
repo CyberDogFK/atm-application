@@ -158,6 +158,15 @@ public class AtmController {
                                 + " have only currency " + atm.getBalanceList()));
         account.setBalance(account.getBalance().subtract(value));
         atmBalance.setBalance(atmBalance.getBalance().subtract(value));
+        if (account.getBalance().compareTo(new BigDecimal(0)) < 0) {
+            throw new RuntimeException("On your account is not enough money, balance: "
+                    + account.getBalance() );
+        }
+        if (atmBalance.getBalance().compareTo(new BigDecimal(0)) < 0) {
+            throw new RuntimeException("Atm balance of "
+                    + atmBalance.getCurrency()
+                    + "is not enough");
+        }
         Account save = accountService.save(account);
         atmBalanceService.save(atmBalance);
         return accountResponseDtoMapper.mapToDto(save);
