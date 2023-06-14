@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
         return user.getAccounts().stream()
                 .filter(it -> it.getId().equals(accountId))
                 .findFirst().orElseThrow(() ->
-                        new RuntimeException("Can't find user " + user.getName()
+                        new DataProcessingException("Can't find user " + user.getName()
                                 + " account with accountId " + accountId));
     }
 }
