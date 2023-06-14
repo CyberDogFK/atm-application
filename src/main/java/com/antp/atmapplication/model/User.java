@@ -26,7 +26,7 @@ public class User {
     private Long id;
     String name;
     String password;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Role role;
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     List<Account> accounts;

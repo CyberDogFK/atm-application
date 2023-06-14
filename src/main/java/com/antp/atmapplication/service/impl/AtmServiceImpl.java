@@ -3,6 +3,7 @@ package com.antp.atmapplication.service.impl;
 import com.antp.atmapplication.model.Atm;
 import com.antp.atmapplication.repository.AtmRepository;
 import com.antp.atmapplication.service.AtmService;
+import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,5 +19,17 @@ public class AtmServiceImpl implements AtmService {
     @Override
     public List<Atm> getAll() {
         return atmRepository.findAll();
+    }
+
+    @Override
+    public Atm getById(Long id) {
+        return atmRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Can't find atm with id " + id));
+    }
+
+    @Override
+    public Atm save(Atm atm) {
+        System.err.println(atm);
+        return atmRepository.save(atm);
     }
 }

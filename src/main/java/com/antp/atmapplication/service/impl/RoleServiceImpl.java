@@ -1,6 +1,6 @@
 package com.antp.atmapplication.service.impl;
 
-import com.antp.atmapplication.lib.DataProcessingException;
+import com.antp.atmapplication.exception.DataProcessingException;
 import com.antp.atmapplication.model.Role;
 import com.antp.atmapplication.repository.RoleRepository;
 import com.antp.atmapplication.service.RoleService;

@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface AtmService {
     List<Atm> getAll();
+
+    Atm getById(Long id);
+
+    Atm save(Atm atm);
 }

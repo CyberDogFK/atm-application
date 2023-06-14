@@ -1,6 +1,6 @@
 package com.antp.atmapplication.security;
 
-import com.antp.atmapplication.lib.AuthenticationException;
+import com.antp.atmapplication.exception.AuthenticationException;
 import com.antp.atmapplication.model.User;
 
 public interface AuthenticationService {
