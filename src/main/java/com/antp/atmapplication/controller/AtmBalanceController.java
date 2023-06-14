@@ -9,6 +9,9 @@ import com.antp.atmapplication.service.UserService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -20,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/atm-balance")
+@Tag(name = "Atm Balance Controller")
 public class AtmBalanceController {
-    private final static Logger logger = LoggerFactory.getLogger(AtmBalanceController.class);
     private final AtmBalanceService atmBalanceService;
     private final ResponseDtoMapper<AtmBalanceResponseDto, AtmBalance> atmBalanceResponseDtoMapper;
     private final RequestDtoMapper<AtmBalanceRequestDto, AtmBalance> atmBalanceRequestDtoMapper;
@@ -41,6 +44,7 @@ public class AtmBalanceController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all atm balances")
     public List<AtmBalanceResponseDto> findAll() {
         return atmBalanceService.findAll().stream()
                 .map(atmBalanceResponseDtoMapper::mapToDto)
@@ -48,6 +52,7 @@ public class AtmBalanceController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Find atm balance with id")
     public AtmBalanceResponseDto findById(@PathVariable Long id) {
         return atmBalanceResponseDtoMapper.mapToDto(
                 atmBalanceService.getById(id)
@@ -55,6 +60,7 @@ public class AtmBalanceController {
     }
 
     @PostMapping
+    @Operation(summary = "Create atm balance")
     public AtmBalanceResponseDto add(@RequestBody AtmBalanceRequestDto dto) {
         return atmBalanceResponseDtoMapper.mapToDto(
                 atmBalanceService.save(
@@ -64,9 +70,28 @@ public class AtmBalanceController {
 
     @PutMapping("/{id}/account/put/{accountId}")
     @Transactional
-    public AtmBalanceResponseDto putMoneyInAccount(@PathVariable Long id,
-                                                @PathVariable Long accountId,
-                                                @RequestParam BigDecimal value,
+    @Operation(summary = "Put money in account from atm",
+            description = """
+    <p><b>User must be authenticated!</b></p>
+    <p>
+        First of all check banknotes. Atm can handle banknotes with value 100, 200, 500
+        If not, return error.
+        After that find account of user, and atm balance.
+        And replenishes the atm balance and user account.
+    </p>
+    <p><b>WARNING!!!</b><p>
+    <p>Operation is not atomic and not transactional,
+    so be carefully before it will be changed</p>
+    """)
+    public AtmBalanceResponseDto putMoneyInAccount(@PathVariable
+                                                       @Parameter(name = "Atm balance id")
+                                                       Long id,
+                                                @PathVariable
+                                                       @Parameter(name = "Account id")
+                                                       Long accountId,
+                                                @RequestParam
+                                                       @Parameter(name = "Value to transfer")
+                                                       BigDecimal value,
                                                 Authentication authentication) {
         checkBanknotes(value);
         final var account = accountService.findUserAccountById(
@@ -80,6 +105,20 @@ public class AtmBalanceController {
 
     @PutMapping("/{id}/account/withdraw/{accountId}")
     @Transactional
+    @Operation(summary = "Withdraw money from atm and account",
+            description =
+                    """
+                    <p><b>User must be authenticated</b></p>
+                    <p>
+                        First of all check banknotes. Atm can handle banknotes with value 100, 200, 500
+                        If not, return error.
+                        After that find account of user, and atm balance.
+                        And get money from user account and atm balance
+                    </p>
+                    <p><b>WARNING!!!</b><p>
+                    <p>Operation is not atomic and not transactional,
+                        so be carefully before it will be changed</p>
+                    """)
     public AtmBalanceResponseDto withdrawFromAccount(@PathVariable Long id,
                                                   @PathVariable Long accountId,
                                                   @RequestParam BigDecimal value,

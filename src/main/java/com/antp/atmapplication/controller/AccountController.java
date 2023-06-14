@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/account")
-@Tag(name = "Account controller", description = "Allow control and work with accounts")
+@Tag(name = "Account controller",
+        description = "Allow control and work with accounts")
 public class AccountController {
     private final AccountService accountService;
     private final ResponseDtoMapper<AccountResponseDto, Account> accountResponseDtoMapper;
