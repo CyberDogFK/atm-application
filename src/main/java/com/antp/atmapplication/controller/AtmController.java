@@ -9,6 +9,9 @@ import com.antp.atmapplication.model.AtmBalance;
 import com.antp.atmapplication.service.AtmService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.math.BigDecimal;
 import java.util.List;
 import jakarta.transaction.Transactional;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/atm")
+@Tag(name = "Atm controller")
 public class AtmController {
     private final static Logger logger = LoggerFactory.getLogger(AtmController.class);
     private final AtmService atmService;
@@ -43,6 +47,7 @@ public class AtmController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all atms")
     public List<AtmResponseDto> getAllAtm() {
         return atmService.getAll().stream()
                 .map(atmResponseDtoMapper::mapToDto)
@@ -50,11 +55,14 @@ public class AtmController {
     }
 
     @GetMapping("/{id}")
-    public AtmResponseDto getById(@PathVariable Long id) {
+    @Operation(summary = "Get atm with id")
+    public AtmResponseDto getById(@PathVariable
+                                      @Parameter(name = "Atm id") Long id) {
         return atmResponseDtoMapper.mapToDto(atmService.getById(id));
     }
 
     @PostMapping
+    @Operation(summary = "Create new atm")
     public AtmResponseDto createAtm(@RequestBody AtmRequestDto atmRequestDto) {
         return atmResponseDtoMapper.mapToDto(
                 atmService.save(
@@ -64,6 +72,7 @@ public class AtmController {
     }
 
     @PutMapping("{id}")
+    @Operation(summary = "Change existing atm")
     public AtmResponseDto update(@RequestBody AtmRequestDto atmRequestDto, @PathVariable Long id) {
         Atm atm = atmRequestDtoMapper.mapToModel(atmRequestDto);
         atm.setId(id);
@@ -72,6 +81,13 @@ public class AtmController {
 
     @PutMapping("/{id}/put")
     @Transactional
+    @Operation(summary = "Put to atm money",
+            description = """
+            <p>
+            Check currency, what admin want to add,
+            find account with those currency and add to it
+            </p>
+            """)
     public AtmResponseDto addValueToAtm(@PathVariable Long id,
                                         @RequestParam String currency,
                                         @RequestParam Integer value) {
@@ -87,6 +103,7 @@ public class AtmController {
     }
 
     @GetMapping("/{id}/balances")
+    @Operation(summary = "Get balances of specific atm")
     public List<AtmBalanceResponseDto> getAtmBalances(@PathVariable Long id) {
         return atmService.getById(id)
                 .getBalanceList().stream()
