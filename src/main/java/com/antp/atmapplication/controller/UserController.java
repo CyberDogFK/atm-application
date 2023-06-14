@@ -9,9 +9,13 @@ import com.antp.atmapplication.service.AccountService;
 import com.antp.atmapplication.service.UserService;
 import com.antp.atmapplication.service.mapper.RequestDtoMapper;
 import com.antp.atmapplication.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User controller")
 public class UserController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
@@ -43,6 +48,7 @@ public class UserController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all users")
     public List<UserResponseDto> getAll() {
         return userService.getAll().stream()
                 .map(responseDtoMapper::mapToDto)
@@ -50,13 +56,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserResponseDto getById(@PathVariable Long id, Authentication authentication) {
-        logger.info("Current user " + authentication.getPrincipal().toString());
+    @Operation(summary = "Get user with specific id")
+    public UserResponseDto getById(@PathVariable
+                                       @Parameter(name = "User id")
+                                       Long id) {
         return responseDtoMapper.mapToDto(userService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public UserResponseDto update(@PathVariable Long id,
+    @Operation(summary = "Change specific user")
+    public UserResponseDto update(@PathVariable
+                                      @Parameter(name = "User id") Long id,
                                   @RequestBody UserRequestDto userDto) {
         User user = requestDtoMapper.mapToModel(userDto);
         user.setId(id);
@@ -64,8 +74,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}/account/{accountId}")
-    public UserResponseDto addAccountToUser(@PathVariable Long id,
-                                            @PathVariable Long accountId) {
+    @Operation(summary = "Add account to existing user")
+    public UserResponseDto addAccountToUser(@PathVariable
+                                                @Parameter(name = "User id")
+                                                Long id,
+                                            @PathVariable
+                                            @Parameter(name = "Account id")
+                                            Long accountId) {
         User user = userService.getById(id);
         Account account = accountService.findById(accountId);
         if (!account.getUser().equals(user)) {
@@ -76,9 +91,11 @@ public class UserController {
     }
 
     @GetMapping("/my-accounts")
+    @Operation(summary = "When you authenticated return your accounts")
     public List<AccountResponseDto> getCurrentUserAccounts(Authentication authentication) {
         return userService.findByName(authentication.getName()).orElseThrow(() ->
-                        new RuntimeException("Can't find user with name " + authentication.getName()))
+                        new RuntimeException("Can't find user with name "
+                                + authentication.getName()))
                 .getAccounts().stream()
                 .map(accountResponseDtoMapper::mapToDto)
                 .toList();
