@@ -1,27 +1,24 @@
-Cлід реалізувати банкомат
+ATM API
 
-Технології springboot, spring jpa, java 11, h2
+Description:
+That atm application allows you set your environment
+for atm. You can add new atm's, atm's balances, users with different roles,
+Accounts of users with different currency. And operation with them
+like transferring money, fill up account threw ATM, and withdraw cash.
+Atm can take only values as 100, 200, 500
+In url /swagger-ui/index.html#/ you can see detail documentation of api
 
-Реалізувати spring security. Адмін може додавати кількість купюр в банкомат. Решта операцій доступні звичайному користувачу. Фронт-енд не потрібно.
+Technologies:
+Java 17
+Spring Boot 3
+Spring JPA
+Spring MVC
+Spring Security
+Open API 2
+Liquibase
+Lombok
+H2 Database
+JUnit
+Mockito
 
-Бекенд повинен мати api:
 
-користувач може покласти на свою картку гроші
-користувач може зняти з своєї картки гроші
-користувач може перекинути на картку іншого користувача гроші із своєї картки
-При виконанні цього завдання слід врахувати різноманітні ситуації з грішми, де б операція могла б бути не виконаною
-
-Банкомат прийматиме суми які кратні 100, 200, 500
-
-Видати банкомат може суми, які є тільки комбінацією вищенаведених купюр
-
-Задеплоїти апплікейшн на Google Cloud / AWS
-
-Створити README і описати проект
-
-Пам’ятати про code style!
-
-Примітка:
-
-в користувача може бути кілька рахунків (карток), тому рекомендовано створити окрему сутність “Рахунок”
-номінал купюр краще винести як окрему сутність, щоб не робити жорсткої прив’язки до банкомату. І створити окрему суміжну таблицю між банкоматом і номіналом, яка буде прив‘язувати номінал до банкомата і ще буде містити колонку “кількість купюр”
