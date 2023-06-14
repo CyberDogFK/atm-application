@@ -82,6 +82,10 @@ public class AccountController {
                                 + authentication.getName()
                                 + " account with id " + id));
         Account sendToAccount = accountService.findById(sendToAccountId);
+        if (!userAccount.getCurrency().getShortName()
+                .equals(sendToAccount.getCurrency().getShortName())) {
+            throw new RuntimeException("For now we are not support transferring between different currency");
+        }
         return accountResponseDtoMapper.mapToDto(
                 accountService.transferMoney(userAccount, sendToAccount, value)
         );
