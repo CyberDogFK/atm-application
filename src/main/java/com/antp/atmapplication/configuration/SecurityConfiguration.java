@@ -32,11 +32,11 @@ public class SecurityConfiguration {
     public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(detailsService).passwordEncoder(passwordEncoder);
     }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/login", "/register");
-    }
+//
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers("/login", "/register", "/v3/api-docs/**", "/swagger-ui.html");
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,9 +45,9 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(HttpMethod.POST,"/register", "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/register", "/login", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf().disable()
                 .headers().frameOptions().disable()
